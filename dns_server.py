@@ -11,8 +11,9 @@ def dns_server(packet):
         print("Source IP:", packet[IP].src)
         print("Destination IP:", packet[IP].dst)
         print("Domain Name:", packet[DNS].qd.qname.decode())
-
-        print(packet.show())
-
+        # pa = packet
+        # print(pa)
+        # packet.show()
+        packet[0][DNS].show()
 # Sniff DNS traffic and invoke dns_server for each received packet
 sniff(filter="udp port 53", prn=dns_server)

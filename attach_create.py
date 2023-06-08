@@ -25,7 +25,7 @@ if __name__ == "__main__":
         version = os.uname().nodename
         #print("Version:", version)
     else: # windows
-        #with open("C:\Windows\System32\config", "rb") as f: #  Permission denied: 'C:\\Windows\\System32\\config'
+        #with open("C:\\Windows\\System32\\config", "rb") as f: #  Permission denied: 'C:\\Windows\\System32\\config'
         #    pass_file = f.read()
         available_languages = locale.windows_locale.values()
         #for language in available_languages:
