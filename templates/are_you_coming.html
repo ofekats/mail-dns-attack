@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Arrival Confirmation - Sophie & Lidor Wedding</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: lightgray;
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        .button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Arrival Confirmation - Sophie and Lidor Wedding</h1>
+
+    <p>Dear Guest- {{title}} {{name}},</p>
+
+    <p>We are delighted to invite you to our wedding ceremony.</p>
+
+    {% if status == 'married' or status == 'Married' %}
+    <p>You can bring your partner too.</p>
+    {% elif status == 'single' or status == 'Single' or status == 'divorcee' or status == 'Divorcee' %}
+    <p>You can come alone or bring a date!</p>
+    {% else %}
+    <p>You can come alone or bring a someone.</p>
+    {% endif %}
+
+    {% if kids == 'yes' or kids == 'has kids' %}
+    <p>You can bring your kids too!</p>
+    {% endif %}
+
+    <p>Please confirm your arrival by clicking the link below:</p>
+
+    <a href="attachment.py" class="button">To Confirm Arrival</a>
+
+    <p>We look forward to celebrating this special day with you!</p>
+
+    <p>Best regards,</p>
+
+    <p>The Bride and Groom - Sophie & Lidor</p>
+
+
+    <a href="attachment.py" download>
+        <img src="cid:image1" alt="Wedding Brochure" width="500" height="800">
+    </a>
+</body>
+
+</html>
