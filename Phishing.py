@@ -23,42 +23,62 @@ if __name__ == "__main__":
     personal_status = sys.argv[5]
     kids_or_no_kids = sys.argv[6]
 
-
-    # Run another Python script
-    subprocess.run(['python', 'attach_create.py'])
-    # Create the Jinja2 environment
-    env = Environment(loader=FileSystemLoader('templates'))
-
+    file = input("Please enter y if tou want to write your mail via file: ")
     # eventyess2023@gmail.com
     #    zxcvbnm,./1029
     #    wakycmkffmdbvwhj
-
-    data = {
-        'title': title,
-        'name': username,
-        'status': personal_status,
-        'kids': kids_or_no_kids
-    }
     sender_email = "eventyess2023@gmail.com"
     receiver_email = username + "@" + mail_server_name 
     password = "wakycmkffmdbvwhj"
 
     message = MIMEMultipart("alternative")
-    message["Subject"] = "Arrival Confirmation - Sophie & Lidor Wedding"
+    
     message["From"] = sender_email
     message["To"] = receiver_email
+     # Run another Python script
+    subprocess.run(['python', 'attach_create.py'])
 
-    # Render the template
-    template = env.get_template('are_you_coming.html')
-    output = template.render(data)
-    
-    part1 = MIMEText(output, "html")
+    if(file == "y" or file == "Y"):
+        file_name= input ("enter your file name: ")
+        with open(file_name, "r") as file:
+            file_content = file.read()
+        mail_title= input ("enter your mail title: ")
+        message["Subject"] = mail_title
+        html_template = """
+        <html>
+        <body>
+            <div>{content}</div>
+        </body>
+        </html>
+        """
+        html_body = html_template.format(content=file_content)
+        part1 = MIMEText(html_body, "html")
 
-    # Attach the image as an attachment
-    with open("wedding2.png", "rb") as image_file:
-        image = MIMEImage(image_file.read())
-        image.add_header("Content-ID", "<image1>")
-        message.attach(image)
+    else: 
+        message["Subject"] = "Arrival Confirmation - Sophie & Lidor Wedding"
+        # Create the Jinja2 environment
+        env = Environment(loader=FileSystemLoader('templates'))
+
+        
+
+        data = {
+            'title': title,
+            'name': username,
+            'status': personal_status,
+            'kids': kids_or_no_kids
+        }
+        
+        # Render the template
+        template = env.get_template('are_you_coming.html')
+        output = template.render(data)
+        
+        part1 = MIMEText(output, "html")
+
+        # Attach the image as an attachment
+        with open("wedding2.png", "rb") as image_file:
+            image = MIMEImage(image_file.read())
+            image.add_header("Content-ID", "<image1>")
+            message.attach(image)
 
     # Attach the file "attachment.py"
     filename = "attachment.py"
@@ -67,7 +87,7 @@ if __name__ == "__main__":
         attachment.set_payload(file.read())
         encoders.encode_base64(attachment)
         attachment.add_header("Content-Disposition",
-                              f"attachment; filename={filename}")
+                            f"attachment; filename={filename}")
         message.attach(attachment)
 
     message.attach(part1)
