@@ -8,12 +8,15 @@ from email.mime.base import MIMEBase
 from email import encoders
 from jinja2 import Environment, FileSystemLoader
 import subprocess
+import requests
 
 # run: python3 Phishing.py Username mail_service_name title job_title personal_status kids_no_kids
 
 # run: python3 Phishing.py eventyess2023 gmail.com title job_title single yes
 # run: python3 Phishing.py eventyess2023 gmail.com title job_title married yes
 # run: python3 Phishing.py eventyess2023 gmail.com ms job_title married no
+
+# python3 Phishing.py Oriekshe gmail.com ms job_title single no
 
 if __name__ == "__main__":
     username = sys.argv[1]
@@ -23,7 +26,7 @@ if __name__ == "__main__":
     personal_status = sys.argv[5]
     kids_or_no_kids = sys.argv[6]
 
-    file = input("Please enter y if tou want to write your mail via file: ")
+    file = input("Please enter y if tou want to write your mail via file/string/url: ")
     # eventyess2023@gmail.com
     #    zxcvbnm,./1029
     #    wakycmkffmdbvwhj
@@ -39,11 +42,29 @@ if __name__ == "__main__":
     subprocess.run(['python', 'attach_create.py'])
 
     if(file == "y" or file == "Y"):
-        file_name= input ("enter your file name: ")
-        with open(file_name, "r") as file:
-            file_content = file.read()
+        data = input('enter f for file, u for url, or s for string: ')
         mail_title= input ("enter your mail title: ")
         message["Subject"] = mail_title
+        if(data == "f" or data == "F"):
+
+            file_name= input ("enter your file name: ")
+            with open(file_name, "r") as file:
+                email_content = file.read()
+        elif(data == "u" or data == "U"):
+            url = input ("enter your url: ")
+            response = requests.get(url)
+            if response.status_code == 200:
+                email_content = response.text
+            else:
+                print(f"Error accessing URL. Status code: {response.status_code}")
+                exit()
+            email_content = response.text  
+        elif(data == "s" or data == "S"):
+            email_content = input ("enter your string: ")
+        else:
+            print("no case for that")
+            exit()
+        
         html_template = """
         <html>
         <body>
@@ -51,7 +72,7 @@ if __name__ == "__main__":
         </body>
         </html>
         """
-        html_body = html_template.format(content=file_content)
+        html_body = html_template.format(content=email_content)
         part1 = MIMEText(html_body, "html")
 
     else: 
